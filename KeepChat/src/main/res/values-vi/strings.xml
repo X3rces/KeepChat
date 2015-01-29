@@ -33,6 +33,7 @@
   <string name="pref_sort_files_username_title">Lựa chọn từ người gỡi</string>
   <string name="pref_other">Khác</string>
   <string name="pref_about">Thông Tin</string>
+  <string name="pref_about_summary">Keepchat được phát hành theo giấy phép GPLv3 license.</string>
   <string name="pref_donate_title">Ủng hộ</string>
   <string name="pref_donate_summary">Ủng hộ tôi, mùa cho tôi môt bia trên Paypal.  Tăng tiền là qúi lám.</string>
   <string name="pref_support_title">Hỗ trợ</string>
@@ -40,4 +41,6 @@
   <string name="video_exists">Phim này đã luu lại ròi.</string>
   <string name="image_saved">Hình đã bị luu lại.</string>
   <string name="video_saved">Phim đã bị luu lại.</string>
+  <string name="image_not_saved">Đã xảy ra lỗi khi lưu hình ảnh này.</string>
+  <string name="video_not_saved">Đã xảy ra lỗi khi lưu phim này.</string>
 </resources>
