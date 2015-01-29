@@ -341,7 +341,7 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             /**
              * If the snap's duration is under the limit, set it to the limit.
              */
-            findAndHookMethod(Obfuscator.RECEIVEDSNAP_CLASS, lpparam.classLoader, "K", new XC_MethodHook() {
+            findAndHookMethod(Obfuscator.RECEIVEDSNAP_CLASS, lpparam.classLoader, Obfuscator.RECEIVEDSNAP_DISPLAYTIME, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Double currentResult = (Double) param.getResult();

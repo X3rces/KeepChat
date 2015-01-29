@@ -28,8 +28,8 @@ public class Obfuscator {
         return versionCode >= SUPPORTED_VERSION_CODE;
     }
 
-    // Keepchat supports v8.1.0 and up
-    private static final int SUPPORTED_VERSION_CODE = 454;
+    // Keepchat supports v9.0.1.0 and up
+    private static final int SUPPORTED_VERSION_CODE = 506;
 
     // com.snapchat.model.Snap
     // Snap.getTimestamp()
@@ -45,6 +45,8 @@ public class Obfuscator {
     public static final String RECEIVEDSNAP_GETSENDER = "j";
     // ReceivedSnap.isScreenshotted()
     public static final String RECEIVEDSNAP_ISSCREENSHOTTED = "F";
+    // ReceivedSnap.getCanonicalDisplayTime()
+    public static final String RECEIVEDSNAP_DISPLAYTIME = "K";
 
     // StorySnap class
     public static final String STORYSNAP_CLASS = "com.snapchat.android.model.StorySnap";
@@ -96,20 +98,20 @@ public class Obfuscator {
     // SnapPreviewFragment class
     public static final String SNAPPREVIEWFRAGMENT_CLASS = "com.snapchat.android.SnapPreviewFragment";
     // SnapPreviewFragment.prepareSnapForSending()
-    public static final String SNAPPREVIEWFRAGMENT_PREPARESNAPFORSENDING = "F";
+    public static final String SNAPPREVIEWFRAGMENT_PREPARESNAPFORSENDING = "j";
     // AnnotatedMediabryo instance variable name in SnapPreviewFragment
-    public static final String SNAPPREVIEWFRAGMENT_VAR_MEDIABYRO = "w";
+    public static final String SNAPPREVIEWFRAGMENT_VAR_MEDIABYRO = "x";
 
     // SnapImagebryo Class
     public static final String SNAPIMAGEBRYO_CLASS = "com.snapchat.android.model.SnapImagebryo";
 
     // com.snapchat.android.model.AnnotatedMediabryo
     // AnnotatedMediabryo.getImageBitmap()
-    public static final String MEDIABRYO_GETSNAPBITMAP = "j";
+    public static final String MEDIABRYO_GETSNAPBITMAP = "x";
 
     // com.snapchat.android.model.Mediabryo
     // Mediabryo.getVideoUri()
-    public static final String MEDIABRYO_VIDEOURI = "q";
+    public static final String MEDIABRYO_VIDEOURI = "E";
 
     // ScreenshotDetector class
     public static final String SCREENSHOTDETECTOR_CLASS = "com.snapchat.android.screenshotdetection.ScreenshotDetector";
