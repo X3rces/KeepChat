@@ -113,6 +113,23 @@ public class Obfuscator {
     // Mediabryo.getVideoUri()
     public static final String MEDIABRYO_VIDEOURI = "E";
 
+    // ImageResourceView Class
+    public static final String IMAGERESOURCEVIEW_CLASS = "com.snapchat.android.ui.ImageResourceView";
+    // ImageResource instance variable name
+    public static final String IMAGERESOURCEVIEW_VAR_IMAGERESOURCE = "a";
+
+    // com.snapchat.android.ui.ImageResource
+    // ChatMedia instance variable name
+    public static final String IMAGERESOURCE_VAR_CHATMEDIA = "d";
+
+    // com.snapchat.android.model.chat.Chat
+    // Chat.getTimestamp()
+    public static final String CHAT_GETTIMESTAMP = "ac";
+
+    // com.snapchat.android.model.chat.StatefulChatFeedItem
+    // StatefulChatFeedItem.getSender()
+    public static final String STATEFULCHATFEEDITEM_GETSENDER = "j";
+
     // ScreenshotDetector class
     public static final String SCREENSHOTDETECTOR_CLASS = "com.snapchat.android.screenshotdetection.ScreenshotDetector";
     // ScreenshotDetector.runDectectionSession()

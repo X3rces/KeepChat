@@ -22,11 +22,14 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.res.XModuleResources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -45,6 +48,7 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
+import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -313,6 +317,34 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 }
             });
 
+            final Class<?> imageResourceViewClass = findClass(Obfuscator.IMAGERESOURCEVIEW_CLASS, lpparam.classLoader);
+            hookAllConstructors(imageResourceViewClass, new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(final MethodHookParam param) throws Throwable {
+                    final ImageView imageView = (ImageView) param.thisObject;
+                    imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Logger.log("----------------------- KEEPCHAT ------------------------", false);
+                            Logger.log("Long press on chat image detected");
+
+                            Bitmap chatImage = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+                            Object imageResource = getObjectField(param.thisObject, Obfuscator.IMAGERESOURCEVIEW_VAR_IMAGERESOURCE);
+
+                            Object chatMedia = getObjectField(imageResource, Obfuscator.IMAGERESOURCE_VAR_CHATMEDIA);
+                            Long timestamp = (Long) callMethod(chatMedia, Obfuscator.CHAT_GETTIMESTAMP);
+                            String sender = (String) callMethod(chatMedia, Obfuscator.STATEFULCHATFEEDITEM_GETSENDER);
+                            String filename = sender + "_" + dateFormat.format(timestamp);
+
+                            saveSnap(SnapType.CHAT, MediaType.IMAGE, imageView.getContext(), chatImage, null, filename, sender);
+                            return true;
+                        }
+                    });
+                }
+            });
+
+
 
             /**
              * If the snap's duration is under the limit, set it to the limit.
@@ -355,7 +387,8 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public enum SnapType {
         SNAP("snap", "/ReceivedSnaps"),
         STORY("story", "/Stories"),
-        SENT("sent", "/SentSnaps");
+        SENT("sent", "/SentSnaps"),
+        CHAT("chat", "/Chat");
 
         private final String name;
         private final String subdir;
