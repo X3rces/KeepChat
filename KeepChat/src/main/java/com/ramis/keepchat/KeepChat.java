@@ -60,7 +60,7 @@ import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
 
 public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
-	public static final String SNAPCHAT_PACKAGE_NAME = "com.snapchat.android";
+    public static final String SNAPCHAT_PACKAGE_NAME = "com.snapchat.android";
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
     private static XModuleResources mResources;
     private XSharedPreferences sharedPreferences;
@@ -86,17 +86,17 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public int mTimerMinimum = TIMER_MINIMUM_DISABLED;
     public boolean mToastEnabled = true;
     public int mToastLength = TOAST_LENGTH_LONG;
-    public String mSavePath = Environment.getExternalStorageDirectory().toString() + "/keepchat";
+    public String mSavePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/keepchat";
     public boolean mSaveSentSnaps = false;
     public boolean mSortByCategory = true;
     public boolean mSortByUsername = true;
     public boolean mDebugging = true;
 
 
-	@Override
-	public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
-		if (!lpparam.packageName.equals(SNAPCHAT_PACKAGE_NAME))
-			return;
+    @Override
+    public void handleLoadPackage(LoadPackageParam lpparam) throws Throwable {
+        if (!lpparam.packageName.equals(SNAPCHAT_PACKAGE_NAME))
+            return;
 
         refreshPreferences();
 
@@ -120,7 +120,7 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             return;
         }
 
-		try {
+        try {
             final Class<?> storySnapClass = findClass(Obfuscator.STORYSNAP_CLASS, lpparam.classLoader);
 
             /**
@@ -265,7 +265,7 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                             if (currentDistance > gestureModel.getDistance()) {
                                 gestureModel.setDistance(currentDistance);
                             } else { // On its way back
-                                // Meaning it's at least 70% back to the start poing and the gesture was longer then 20% of the screen
+                                // Meaning it's at least 70% back to the start point and the gesture was longer then 20% of the screen
                                 if (currentDistance < gestureModel.getDistance() * 0.3 && gestureModel.getDistance() > 0.2 * gestureModel.getDisplayHeight()) {
                                     gestureModel.setSaved();
                                     Context context = (Context) callMethod(snapView, "getContext");
@@ -368,19 +368,19 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             /**
              * Prevent creation of the ScreenshotDetector class.
              */
-			findAndHookMethod(Obfuscator.SCREENSHOTDETECTOR_CLASS, lpparam.classLoader, Obfuscator.SCREENSHOTDETECTOR_RUNDECTECTIONSESSION, List.class, long.class,
+            findAndHookMethod(Obfuscator.SCREENSHOTDETECTOR_CLASS, lpparam.classLoader, Obfuscator.SCREENSHOTDETECTOR_RUNDECTECTIONSESSION, List.class, long.class,
                     XC_MethodReplacement.DO_NOTHING);
 
-		} catch (Exception e) {
+        } catch (Exception e) {
             Logger.log("Error occured: Keepchat doesn't currently support this version, wait for an update", e);
 
-			findAndHookMethod("com.snapchat.android.LandingPageActivity", lpparam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
+            findAndHookMethod("com.snapchat.android.LandingPageActivity", lpparam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Toast.makeText((Context) param.thisObject, "This version of snapchat is currently not supported by Keepchat.", Toast.LENGTH_LONG).show();
                 }
             });
-		}
-	}
+        }
+    }
 
 
 
@@ -482,7 +482,7 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         }
     }
 
-	private void refreshPreferences() {
+    private void refreshPreferences() {
         boolean prefsChanged = false;
         if (sharedPreferences == null) {
             sharedPreferences = new XSharedPreferences(BuildConfig.APPLICATION_ID);
@@ -524,14 +524,14 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 Logger.log("~ mSortByUsername: " + mSortByUsername);
             }
         }
-	}
+    }
 
-	private File createFileDir(String category, String sender) throws IOException {
+    private File createFileDir(String category, String sender) throws IOException {
         File directory = new File(mSavePath);
 
-		if (mSortByCategory || (mSortByUsername && sender == null)) {
+        if (mSortByCategory || (mSortByUsername && sender == null)) {
             directory = new File(directory, category);
-		}
+        }
 
         if (mSortByUsername && sender != null) {
             directory = new File(directory, sender);
@@ -542,52 +542,52 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         }
 
         return directory;
-	}
+    }
 
-	// function to saveimage
-	private static boolean saveImage(Bitmap image, File fileToSave) {
-		try {
-			FileOutputStream out = new FileOutputStream(fileToSave);
-			image.compress(Bitmap.CompressFormat.JPEG, 90, out);
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-            Logger.log("Exception while saving an image", e);
-			return false;
-		}
-		return true;
-	}
-
-	// function to save video
-	private static boolean saveVideo(String videoUri, File fileToSave) {
-		try {
-			FileInputStream in = new FileInputStream(new File(videoUri));
-			FileOutputStream out = new FileOutputStream(fileToSave);
-
-			byte[] buf = new byte[1024];
-			int len;
-
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-
-			in.close();
-			out.flush();
-			out.close();
+    // function to saveimage
+    private static boolean saveImage(Bitmap image, File fileToSave) {
+        try {
+            FileOutputStream out = new FileOutputStream(fileToSave);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
             return true;
-		} catch (Exception e) {
-            Logger.log("Exception while saving a video", e);
-			return false;
-		}
-	}
+        } catch (Exception e) {
+            Logger.log("Exception while saving an image", e);
+            return false;
+        }
+    }
 
-	/*
-	 * Tells the media scanner to scan the newly added image or video so that it
-	 * shows up in the gallery without a reboot. And shows a Toast message where
-	 * the media was saved.
-	 * @param context Current context
-	 * @param filePath File to be scanned by the media scanner
-	 */
+    // function to save video
+    private static boolean saveVideo(String videoUri, File fileToSave) {
+        try {
+            FileInputStream in = new FileInputStream(new File(videoUri));
+            FileOutputStream out = new FileOutputStream(fileToSave);
+
+            byte[] buf = new byte[1024];
+            int len;
+
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+
+            in.close();
+            out.flush();
+            out.close();
+            return true;
+        } catch (Exception e) {
+            Logger.log("Exception while saving a video", e);
+            return false;
+        }
+    }
+
+    /*
+     * Tells the media scanner to scan the newly added image or video so that it
+     * shows up in the gallery without a reboot. And shows a Toast message where
+     * the media was saved.
+     * @param context Current context
+     * @param filePath File to be scanned by the media scanner
+     */
     private void runMediaScanner(Context context, String... mediaPath) {
         try {
             Logger.log("MediaScanner started");
@@ -612,8 +612,8 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         }
     }
 
-	@Override
-	public void initZygote(StartupParam startupParam) throws Throwable {
-		mResources = XModuleResources.createInstance(startupParam.modulePath, null);
-	}
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        mResources = XModuleResources.createInstance(startupParam.modulePath, null);
+    }
 }

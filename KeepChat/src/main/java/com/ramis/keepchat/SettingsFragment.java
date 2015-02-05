@@ -41,11 +41,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private SharedPreferences sharedPreferences;
 
-	@SuppressWarnings("deprecation")
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getPreferenceManager().setSharedPreferencesMode(Context.MODE_WORLD_READABLE);
-		addPreferencesFromResource(R.xml.preferences);
+    @SuppressWarnings("deprecation")
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getPreferenceManager().setSharedPreferencesMode(Context.MODE_WORLD_READABLE);
+        addPreferencesFromResource(R.xml.preferences);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -57,13 +57,13 @@ public class SettingsFragment extends PreferenceFragment {
         Preference aboutPreference = findPreference("pref_about");
         aboutPreference.setTitle(getString(R.string.pref_about_title, BuildConfig.VERSION_NAME));
 
-		// If the Save Location doesn't exist in SharedPreferences add it
-		if (!sharedPreferences.contains(PREF_KEY_SAVE_LOCATION)) {
+        // If the Save Location doesn't exist in SharedPreferences add it
+        if (!sharedPreferences.contains(PREF_KEY_SAVE_LOCATION)) {
             String defaultLocation = Environment.getExternalStorageDirectory().toString() + "/keepchat";
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(PREF_KEY_SAVE_LOCATION, defaultLocation);
-			editor.apply();
-		}
+            editor.apply();
+        }
 
         // Set onClickListener for choosing the Save Location
         Preference locationChooser = findPreference(PREF_KEY_SAVE_LOCATION);
@@ -78,15 +78,15 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
-	}
+    }
 
     // Receives the result of the DirectoryChooserActivity
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == REQUEST_CHOOSE_DIR) {
-			if (resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED) {
+        if (requestCode == REQUEST_CHOOSE_DIR) {
+            if (resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED) {
                 String newLocation = data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -95,9 +95,9 @@ public class SettingsFragment extends PreferenceFragment {
 
                 Preference pref = findPreference(PREF_KEY_SAVE_LOCATION);
                 pref.setSummary(newLocation);
-			}
-		}
-	}
+            }
+        }
+    }
 
     @Override
     public void onPause() {

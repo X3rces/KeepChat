@@ -23,11 +23,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 public class SettingsActivity extends Activity {
-	
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setTitle(getString(R.string.keepchat_settings));
-		getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-	}
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
 }
