@@ -266,7 +266,7 @@ public class KeepChat implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                                 gestureModel.setDistance(currentDistance);
                             } else { // On its way back
                                 // Meaning it's at least 70% back to the start point and the gesture was longer then 20% of the screen
-                                if (currentDistance < gestureModel.getDistance() * 0.3 && gestureModel.getDistance() > 0.2 * gestureModel.getDisplayHeight()) {
+                                if ((currentDistance < (gestureModel.getDistance() * 0.3)) && (gestureModel.getDistance() > (gestureModel.getDisplayHeight() * 0.2))) {
                                     gestureModel.setSaved();
                                     Context context = (Context) callMethod(snapView, "getContext");
                                     saveReceivedSnap(context, gestureModel.getReceivedSnap());
